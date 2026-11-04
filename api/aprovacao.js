@@ -5,12 +5,17 @@
 //   CLICKUP_TOKEN    token pessoal da API do ClickUp (Settings → Apps). Secreto: cadastrar como "Sensitive".
 //   CLICKUP_LIST_ID  ID da lista do cliente no ClickUp (vários: separados por vírgula). Só tarefas dessas listas são aceitas.
 //
-// GET  /api/aprovacao?ids=ID1,ID2  → { estados: { ID1: 'aguardando' | 'aprovado' | 'ajuste' | 'agendado' | 'postado' | 'em-producao' } }
-// POST /api/aprovacao  { id, acao: 'aprovar' | 'ajuste', texto }  → { ok: true, estado }
+// GET  /api/aprovacao?ids=ID1,ID2  → { estados: { ID1: 'aguardando' | 'aprovado' | 'ajuste' | 'agendado' | 'postado' | 'em-producao' }, parcial: { ID1: true } }
+// POST /api/aprovacao  { id, acao: 'aprovar' | 'parcial' | 'ajuste', texto }  → { ok: true, estado, parcial }
+//
+// Aprovação parcial: o cliente aprova o texto (legenda, roteiro, frases) e o que já está pronto
+// num post que ainda não tem a arte, foto ou vídeo final. Marca a tag 'aprovado-parcial' e comenta
+// na tarefa. NÃO conta como aprovação final: não muda o status e não dispara o agendamento.
 
 const API = 'https://api.clickup.com/api/v2';
 const TAG_OK = 'aprovado-cliente';
 const TAG_AJUSTE = 'ajuste-cliente';
+const TAG_PARCIAL = 'aprovado-parcial';
 const ST_AGUARDANDO = 'aguardando aprovação';
 const ST_AJUSTE = 'em progresso';
 const ID_OK = /^[a-z0-9]{4,20}$/i;
@@ -56,6 +61,10 @@ function estadoDe(t) {
   return 'em-producao';
 }
 
+function parcialDe(t) {
+  return (t.tags || []).some((x) => norm(x.name) === TAG_PARCIAL);
+}
+
 function agoraBR() {
   return new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
@@ -84,10 +93,11 @@ module.exports = async function handler(req, res) {
       const url = new URL(req.url, 'http://x');
       const ids = String(url.searchParams.get('ids') || '').split(',').map((s) => s.trim()).filter((s) => ID_OK.test(s)).slice(0, 40);
       const estados = {};
+      const parcial = {};
       await Promise.all(ids.map(async (id) => {
-        try { estados[id] = estadoDe(await lerTarefa(id)); } catch (_) { estados[id] = null; }
+        try { const t = await lerTarefa(id); estados[id] = estadoDe(t); if (parcialDe(t)) parcial[id] = true; } catch (_) { estados[id] = null; }
       }));
-      return json(res, 200, { ok: true, estados });
+      return json(res, 200, { ok: true, estados, parcial });
     }
 
     if (req.method === 'POST') {
@@ -95,16 +105,29 @@ module.exports = async function handler(req, res) {
       const id = String(b.id || '');
       const acao = String(b.acao || '');
       const texto = String(b.texto || '').trim().slice(0, 2000);
-      if (!ID_OK.test(id) || !['aprovar', 'ajuste'].includes(acao)) return json(res, 400, { ok: false, erro: 'Pedido inválido.' });
+      if (!ID_OK.test(id) || !['aprovar', 'parcial', 'ajuste'].includes(acao)) return json(res, 400, { ok: false, erro: 'Pedido inválido.' });
       if (acao === 'ajuste' && !texto) return json(res, 400, { ok: false, erro: 'Conte o que precisa mudar.' });
 
       const t = await lerTarefa(id);
       const atual = estadoDe(t);
       if (atual === 'agendado' || atual === 'postado') return json(res, 409, { ok: false, estado: atual, erro: 'Este post já foi agendado. Fale com a Pulsa Lab para mudar.' });
-      if (atual === 'em-producao') return json(res, 409, { ok: false, estado: atual, erro: 'Este post ainda está em produção.' });
+      if (acao === 'aprovar' && atual === 'em-producao') return json(res, 409, { ok: false, estado: atual, erro: 'Este post ainda está em produção. Você já pode fazer a aprovação parcial.' });
 
       const tag = (nome) => '/task/' + encodeURIComponent(id) + '/tag/' + encodeURIComponent(nome);
       const has = (nome) => (t.tags || []).some((x) => norm(x.name) === nome);
+
+      if (acao === 'parcial') {
+        if (atual === 'ajuste') return json(res, 409, { ok: false, estado: atual, erro: 'O ajuste pedido ainda está sendo feito.' });
+        if (atual === 'aprovado') return json(res, 200, { ok: true, estado: atual, parcial: has(TAG_PARCIAL) });
+        if (!has(TAG_PARCIAL)) {
+          await cu(tag(TAG_PARCIAL), { method: 'POST', body: '{}' });
+          await cu('/task/' + encodeURIComponent(id) + '/comment', {
+            method: 'POST',
+            body: JSON.stringify({ comment_text: '🟡 Aprovação parcial do cliente na página de aprovação (' + agoraBR() + '): texto e conteúdo já prontos aprovados.' + (texto ? ' Falta: ' + texto + '.' : '') + ' A versão final ainda precisa da aprovação completa.', notify_all: true }),
+          });
+        }
+        return json(res, 200, { ok: true, estado: atual, parcial: true });
+      }
 
       if (acao === 'aprovar') {
         if (atual === 'ajuste') return json(res, 409, { ok: false, estado: atual, erro: 'O ajuste pedido ainda está sendo feito.' });
@@ -120,13 +143,14 @@ module.exports = async function handler(req, res) {
 
       // ajuste
       if (has(TAG_OK)) await cu(tag(TAG_OK), { method: 'DELETE' });
+      if (has(TAG_PARCIAL)) await cu(tag(TAG_PARCIAL), { method: 'DELETE' });
       if (!has(TAG_AJUSTE)) await cu(tag(TAG_AJUSTE), { method: 'POST', body: '{}' });
       await cu('/task/' + encodeURIComponent(id), { method: 'PUT', body: JSON.stringify({ status: ST_AJUSTE }) });
       await cu('/task/' + encodeURIComponent(id) + '/comment', {
         method: 'POST',
         body: JSON.stringify({ comment_text: '✏️ Ajuste pedido pelo cliente na página de aprovação (' + agoraBR() + '):\n\n' + texto, notify_all: true }),
       });
-      return json(res, 200, { ok: true, estado: 'ajuste' });
+      return json(res, 200, { ok: true, estado: 'ajuste', parcial: false });
     }
 
     res.setHeader('Allow', 'GET, POST');
