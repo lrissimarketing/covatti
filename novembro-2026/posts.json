@@ -8,11 +8,11 @@
   "posts": [
     {
       "n": 1,
-      "taskId": "1dfh60pfynk",
+      "taskId": "1dfh60pfynh",
       "tipo": "carrossel",
-      "data": "03/11",
-      "dataISO": "2026-11-03",
-      "rotulo": "Loja ou parceiro?",
+      "data": "09/11",
+      "dataISO": "2026-11-09",
+      "rotulo": "Prazer, Covatti",
       "midias": [
         {
           "tipo": "imagem",
@@ -43,29 +43,30 @@
           "arquivo": "p01-7.jpg"
         }
       ],
-      "pendente": "fotos nos slides 3 e 6"
+      "pendente": "fotos nos slides 3 e 5"
     },
     {
       "n": 2,
-      "taskId": "1dfh60pfynm",
+      "taskId": "1dfh60pfynj",
       "tipo": "imagem",
-      "data": "05/11",
-      "dataISO": "2026-11-05",
-      "rotulo": "Entender e planejar",
+      "data": "11/11",
+      "dataISO": "2026-11-11",
+      "rotulo": "Do cabo ao servidor",
       "midias": [
         {
           "tipo": "imagem",
           "arquivo": "p02-1.jpg"
         }
-      ]
+      ],
+      "pendente": "foto da infraestrutura"
     },
     {
       "n": 3,
-      "taskId": "1dfh60pfynn",
+      "taskId": "1dfh60pfynk",
       "tipo": "carrossel",
-      "data": "10/11",
-      "dataISO": "2026-11-10",
-      "rotulo": "Mito do antivírus",
+      "data": "16/11",
+      "dataISO": "2026-11-16",
+      "rotulo": "Loja ou parceiro?",
       "midias": [
         {
           "tipo": "imagem",
@@ -96,14 +97,67 @@
           "arquivo": "p03-7.jpg"
         }
       ],
-      "pendente": "fotos nos slides 1 e 5"
+      "pendente": "fotos nos slides 3 e 6"
     },
     {
       "n": 4,
+      "taskId": "1dfh60pfynm",
+      "tipo": "imagem",
+      "data": "18/11",
+      "dataISO": "2026-11-18",
+      "rotulo": "Entender e planejar",
+      "midias": [
+        {
+          "tipo": "imagem",
+          "arquivo": "p04-1.jpg"
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "taskId": "1dfh60pfynn",
+      "tipo": "carrossel",
+      "data": "23/11",
+      "dataISO": "2026-11-23",
+      "rotulo": "Mito do antivírus",
+      "midias": [
+        {
+          "tipo": "imagem",
+          "arquivo": "p05-1.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p05-2.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p05-3.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p05-4.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p05-5.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p05-6.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p05-7.jpg"
+        }
+      ],
+      "pendente": "fotos nos slides 1 e 5"
+    },
+    {
+      "n": 6,
       "taskId": "1dfh60pfynp",
       "tipo": "reel",
-      "data": "11/11",
-      "dataISO": "2026-11-11",
+      "data": "24/11",
+      "dataISO": "2026-11-24",
       "rotulo": "Dentro do rack",
       "midias": [
         {
@@ -115,72 +169,73 @@
       "pendente": "vídeo do reel"
     },
     {
-      "n": 5,
+      "n": 7,
       "taskId": "1dfh60pfynq",
       "tipo": "imagem",
-      "data": "12/11",
-      "dataISO": "2026-11-12",
+      "data": "25/11",
+      "dataISO": "2026-11-25",
       "rotulo": "Nossa equipe",
-      "midias": [
-        {
-          "tipo": "imagem",
-          "arquivo": "p05-1.jpg"
-        }
-      ],
-      "pendente": "foto da equipe e trecho entre colchetes na legenda"
-    },
-    {
-      "n": 6,
-      "taskId": "1dfh60pfynr",
-      "tipo": "carrossel",
-      "data": "17/11",
-      "dataISO": "2026-11-17",
-      "rotulo": "Seu backup funciona?",
-      "midias": [
-        {
-          "tipo": "imagem",
-          "arquivo": "p06-1.jpg"
-        },
-        {
-          "tipo": "imagem",
-          "arquivo": "p06-2.jpg"
-        },
-        {
-          "tipo": "imagem",
-          "arquivo": "p06-3.jpg"
-        },
-        {
-          "tipo": "imagem",
-          "arquivo": "p06-4.jpg"
-        },
-        {
-          "tipo": "imagem",
-          "arquivo": "p06-5.jpg"
-        },
-        {
-          "tipo": "imagem",
-          "arquivo": "p06-6.jpg"
-        },
-        {
-          "tipo": "imagem",
-          "arquivo": "p06-7.jpg"
-        }
-      ],
-      "pendente": "foto no slide 5"
-    },
-    {
-      "n": 7,
-      "taskId": "1dfh60pfynt",
-      "tipo": "imagem",
-      "data": "19/11",
-      "dataISO": "2026-11-19",
-      "rotulo": "TI em 2027",
       "midias": [
         {
           "tipo": "imagem",
           "arquivo": "p07-1.jpg"
         }
-      ]
+      ],
+      "pendente": "foto da equipe e trecho entre colchetes na legenda"
+    },
+    {
+      "n": 8,
+      "taskId": "1dfh60pfynr",
+      "tipo": "carrossel",
+      "data": "30/11",
+      "dataISO": "2026-11-30",
+      "rotulo": "Seu backup funciona?",
+      "midias": [
+        {
+          "tipo": "imagem",
+          "arquivo": "p08-1.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p08-2.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p08-3.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p08-4.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p08-5.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p08-6.jpg"
+        },
+        {
+          "tipo": "imagem",
+          "arquivo": "p08-7.jpg"
+        }
+      ],
+      "pendente": "foto no slide 5"
+    },
+    {
+      "n": 9,
+      "taskId": "1dfh60pfynt",
+      "tipo": "imagem",
+      "data": "02/12",
+      "dataISO": "2026-12-02",
+      "rotulo": "TI em 2027",
+      "midias": [
+        {
+          "tipo": "imagem",
+          "arquivo": "p09-1.jpg"
+        }
+      ],
+      "pendente": "foto de fundo"
     }
   ]
 }
