@@ -128,6 +128,8 @@ button{font-family:inherit;color:inherit}
 .est-aprovado{background:#c1ff72;color:#1c1530}
 .est-ajuste{background:#fdf9ec;color:#6c2ee6;box-shadow:inset 0 0 0 1.5px #8c52ff}
 .est-agendado,.est-postado{background:#1c1530;color:#c1ff72}
+.est-parcial{background:#f6f0e7;color:#3e2475;box-shadow:inset 0 0 0 1.5px #ac87a7}
+.aprov-nota{margin:0 0 14px 0;font-size:13px;font-weight:300;line-height:1.6;color:#3e2475}
 @media (max-width:620px){.badge-s{bottom:6px;left:6px;padding:4px 7px;font-size:8px;letter-spacing:.1em}}
 .sb-est{display:block;font-weight:600}
 .progress{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:6px}
@@ -212,6 +214,8 @@ button{font-family:inherit;color:inherit}
    Todos os arquivos ficam na mesma pasta do index.html (sem subpastas).
    Num carrossel, um slide de vídeo é { video: '...', poster: '...' }.
    taskId = ID da tarefa do post no ClickUp (liga os botões de aprovação).
+   pendente = o que ainda falta no post (ex.: 'fotos nos slides 3 e 5', 'o vídeo').
+     Post com pendente, ou sem mídia, mostra o botão de aprovação parcial (aprova só o texto e o que já está pronto).
    ───────────────────────────────────────────── */
 const CLIENTE = 'Covatti';
 const MES = 'Novembro 2026';
@@ -231,7 +235,8 @@ const CONTEUDO = [
       "p01-5.jpg",
       "p01-6.jpg",
       "p01-7.jpg"
-    ]
+    ],
+    "pendente": "fotos nos slides 3 e 5"
   },
   {
     "taskId": "1dfh60pfynj",
@@ -241,7 +246,8 @@ const CONTEUDO = [
     "titulo": "Do cabo ao servidor: tudo o que a TI da sua empresa precisa em um só parceiro",
     "formato": "Leia a legenda",
     "legenda": "Quando a TI de uma empresa depende de vários fornecedores, um problema simples vira uma maratona de ligações. Um cuida da rede, outro dos computadores, outro do sistema, e ninguém enxerga o todo.\n\nNa Covatti, a gente cuida da estrutura inteira. Veja o que fazemos, organizado por área:\n\nESTRUTURA\nInfraestrutura de rede (cabeamento, racks e organização), Wi-Fi corporativo e instalação de câmeras de segurança (CFTV).\n\nIMPLEMENTAÇÃO\nExecutamos com organização e documentação: desde cabeamento estruturado, servidores, acessos e configurações.\n\nEQUIPAMENTOS E SUPRIMENTOS\nVenda com orientação: o equipamento certo para cada função, sem exageros e com o melhor custo-benefício.\n\nSEGURANÇA E ACESSO\nFirewall e VPN, controle de acesso aos servidores (Microsoft AD) e licenciamento de software.\n\nDADOS\nVirtualização (Proxmox/VMware), backup de dados (NAS/Storage) e hospedagem de e-mails e sites.\n\nSUPORTE E GESTÃO\nManutenção de computadores, notebooks e servidores Windows e Linux, inventário e controle de patrimônio, documentação e compliance de TI.\n\nE como nenhuma empresa é igual à outra, trabalhamos com contratos personalizados, montados conforme a necessidade de cada cliente.\n\nFicou com dúvida sobre algum desses serviços? Manda no direct ou chama no WhatsApp que a gente explica.",
-    "imagem": "p02-1.jpg"
+    "imagem": "p02-1.jpg",
+    "pendente": "foto da infraestrutura"
   },
   {
     "taskId": "1dfh60pfynk",
@@ -258,7 +264,8 @@ const CONTEUDO = [
       "p03-5.jpg",
       "p03-6.jpg",
       "p03-7.jpg"
-    ]
+    ],
+    "pendente": "fotos nos slides 3 e 6"
   },
   {
     "taskId": "1dfh60pfynm",
@@ -285,7 +292,8 @@ const CONTEUDO = [
       "p05-5.jpg",
       "p05-6.jpg",
       "p05-7.jpg"
-    ]
+    ],
+    "pendente": "fotos nos slides 1 e 5"
   },
   {
     "taskId": "1dfh60pfynp",
@@ -296,7 +304,8 @@ const CONTEUDO = [
     "legenda": "Ele fica num canto da sala e quase ninguém olha para ele, mas é ali que a rede inteira da sua empresa funciona. Hoje um dos nossos técnicos mostra o que tem dentro de um rack e por que a organização dele faz tanta diferença no dia a dia.",
     "roteiro": "HOOK (0–3s)\n[Técnico apontando para o rack]\n\"Toda empresa tem um desses. E quase ninguém sabe o que tem aqui dentro.\"\n\nDESENVOLVIMENTO\n\"Esse é o rack, o armário onde fica o coração da rede da empresa. Aqui em cima [aponta] estão os switches, que distribuem a rede para cada computador, impressora e câmera. Todos esses cabos saem daqui e chegam até cada mesa. Aqui [aponta] fica o firewall, que controla o que entra e o que sai da rede. E aqui embaixo [aponta] fica o nobreak, que mantém tudo ligado quando a energia oscila.\"\n\nVIRADA\n\"Quando esse armário está bagunçado, com cabo sem identificação e equipamento esquentando, um problema simples vira horas de procura. Organizado assim, a gente encontra e resolve em minutos.\"\n\nCTA\n\"Se você nunca abriu o rack da sua empresa, ou tem medo do que vai encontrar aí dentro, chama a Covatti no direct.\"",
     "capa": "",
-    "video": ""
+    "video": "",
+    "pendente": "vídeo do reel"
   },
   {
     "taskId": "1dfh60pfynq",
@@ -306,7 +315,8 @@ const CONTEUDO = [
     "titulo": "Quem está por trás da Covatti",
     "formato": "Leia a legenda",
     "legenda": "Por trás de cada rede funcionando, servidor no ar e backup em dia, tem gente. Essa é a equipe da Covatti.\n\n[Apresentar cada pessoa: nome, função e há quanto tempo está na Covatti]\n\nSão 12 anos atendendo empresas do Oeste catarinense. O que nos trouxe até aqui foi a forma de trabalhar: entender cada cliente antes de recomendar qualquer coisa e continuar por perto depois que tudo está instalado.\n\nQuando você chamar a Covatti, é com essas pessoas que vai falar. Manda um oi no direct.",
-    "imagem": "p07-1.jpg"
+    "imagem": "p07-1.jpg",
+    "pendente": "foto da equipe e trecho entre colchetes na legenda"
   },
   {
     "taskId": "1dfh60pfynr",
@@ -323,7 +333,8 @@ const CONTEUDO = [
       "p08-5.jpg",
       "p08-6.jpg",
       "p08-7.jpg"
-    ]
+    ],
+    "pendente": "foto no slide 5"
   },
   {
     "taskId": "1dfh60pfynt",
@@ -333,7 +344,8 @@ const CONTEUDO = [
     "titulo": "Planejamento de TI para 2027: por que fazer agora",
     "formato": "Leia a legenda",
     "legenda": "Fim de ano é quando a maioria das empresas fecha o orçamento do ano seguinte. E é comum a TI ficar de fora até que algo apresente problema. Aí a compra vira urgência, sem tempo de comparar nem de planejar.\n\nPor isso vale olhar para a tecnologia agora. Alguns pontos para colocar no planejamento de 2027:\n\n1. Equipamentos: quais computadores e notebooks já estão no limite e vão precisar de troca ao longo do ano?\n2. Licenças: quais softwares vencem em 2027, e estão todos regularizados?\n3. Segurança e backup: a empresa tem firewall e backup? Se não, isso entra como prioridade.\n4. Rede e Wi-Fi corporativo: a estrutura suporta o crescimento da equipe previsto para o ano?\n5. Suporte técnico: sua empresa tem uma equipe preparada para agir quando algum serviço ou equipamento deixa de funcionar?\n6. Controle de acesso digital (AD): controla quem acessa os computadores, sistemas e arquivos da empresa, definindo permissões individuais para cada funcionário.\n7. Controle de acesso físico (facial, biometria, TAG): gerencia quem pode entrar e sair das instalações, definindo permissões de acesso por horários e áreas restritas, com integração com o RH (controle de ponto).\n\nPlanejar a TI não significa simplesmente gastar mais. Significa investir melhor, reduzir riscos, evitar imprevistos e garantir que a tecnologia acompanhe o crescimento da empresa.\n\nA Covatti pode ajudar nesse planejamento. Avaliamos a infraestrutura atual da sua empresa e identificamos o que precisa de atenção imediata, o que pode ser planejado para depois e onde não há necessidade de novos investimentos.\n\nNão espere a tecnologia parar para começar a investir nela.\n\nQuer começar 2027 com a TI planejada? Chame no direct ou no WhatsApp e agende um diagnóstico.",
-    "imagem": "p09-1.jpg"
+    "imagem": "p09-1.jpg",
+    "pendente": "foto de fundo"
   }
 ];
 
@@ -356,8 +368,19 @@ const st = { open: null, slide: 0, playing: false, menuOpen: false, lastFocus: n
 const API_URL = '/api/aprovacao';
 const EST = {};            // taskId → estado
 let apiOk = false;
-const EST_TXT = { aprovado: 'Aprovado', ajuste: 'Ajuste pedido', agendado: 'Agendado', postado: 'Publicado' };
+const EST_TXT = { aprovado: 'Aprovado', parcial: 'Aprovado parcial', ajuste: 'Ajuste pedido', agendado: 'Agendado', postado: 'Publicado' };
+const PARC = {};           // taskId → true quando o cliente fez a aprovação parcial
 const estadoPost = (p) => (apiOk && p && p.taskId) ? (EST[p.taskId] || null) : null;
+// Estado mostrado na lista e na grade: a aprovação parcial aparece enquanto não houver aprovação final, ajuste ou agendamento.
+const estadoVis = (p) => { const e = estadoPost(p); return (e && PARC[p.taskId] && ['aguardando', 'em-producao'].includes(e)) ? 'parcial' : e; };
+// O que ainda falta no post (arte, foto, vídeo). Vem do campo "pendente" ou da ausência de mídia.
+function faltando(p) {
+  if (p.pendente) return String(p.pendente);
+  if (p.tipo === 'reel' && !p.video) return 'o vídeo';
+  if (p.tipo !== 'reel' && !slidesOf(p).filter(Boolean).length) return 'a arte';
+  return '';
+}
+const temTexto = (p) => !!String((p.legenda || '') + (p.roteiro || '') + (p.titulo || '')).trim();
 
 async function carregarEstados() {
   const ids = CONTEUDO.map((p) => p.taskId).filter(Boolean);
@@ -367,6 +390,7 @@ async function carregarEstados() {
     const j = await r.json();
     if (!r.ok || !j.ok) return;
     Object.assign(EST, j.estados || {});
+    Object.assign(PARC, j.parcial || {});
     apiOk = true;
     refresh();
   } catch (_) { /* sem API: a página funciona só para visualização */ }
@@ -379,6 +403,7 @@ async function enviar(i, acao, texto) {
     const r = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: p.taskId, acao, texto: texto || '' }) });
     const j = await r.json().catch(() => ({}));
     if (j.estado) EST[p.taskId] = j.estado;
+    if (typeof j.parcial === 'boolean') PARC[p.taskId] = j.parcial;
     if (!r.ok || !j.ok) throw new Error(j.erro || 'Não foi possível enviar agora. Tente de novo em instantes.');
     st.form = false;
   } catch (e) {
@@ -405,7 +430,8 @@ function renderProgress() {
   const pend = comTarefa.filter((p) => estadoPost(p) === 'aguardando').length;
   $('progress').hidden = false;
   $('progBar').style.width = Math.round(ok / comTarefa.length * 100) + '%';
-  $('progTxt').textContent = plural(ok, 'post aprovado', 'posts aprovados') + ' de ' + comTarefa.length;
+  const parc = comTarefa.filter((p) => estadoVis(p) === 'parcial').length;
+  $('progTxt').textContent = plural(ok, 'post aprovado', 'posts aprovados') + ' de ' + comTarefa.length + (parc ? ' · ' + plural(parc, 'com aprovação parcial', 'com aprovação parcial') : '');
   $('aprovarTodos').hidden = pend === 0;
 }
 
@@ -414,9 +440,7 @@ function aprovHtml(p) {
   if (!e) return '';
   const err = st.erro ? `<p class="aprov-msg err" role="alert">${esc(st.erro)}</p>` : '';
   let body = '';
-  if (e === 'em-producao') {
-    body = `<p class="aprov-msg">Este post ainda está em produção. Assim que ficar pronto, ele aparece aqui para aprovação.</p>`;
-  } else if (e === 'agendado' || e === 'postado') {
+  if (e === 'agendado' || e === 'postado') {
     body = `<span class="est-pill est-${e}">${EST_TXT[e]}</span><p class="aprov-msg">${e === 'agendado' ? 'Aprovado e já agendado para publicação.' : 'Este post já foi publicado.'}</p>`;
   } else if (e === 'ajuste') {
     body = `<span class="est-pill est-ajuste">Ajuste pedido</span><p class="aprov-msg">Recebemos o seu pedido de ajuste. A Pulsa Lab vai revisar e o post volta aqui para aprovação.</p>`;
@@ -430,6 +454,22 @@ function aprovHtml(p) {
   } else if (e === 'aprovado') {
     body = `<span class="est-pill est-aprovado">✓ Aprovado</span><p class="aprov-msg">Obrigado! Este post vai ser agendado.</p>
       <button type="button" class="btn btn-link" id="abrirAjuste" ${st.busy ? 'disabled' : ''}>Pedir um ajuste mesmo assim</button>`;
+  } else if (temTexto(p) && (faltando(p) || e === 'em-producao')) {
+    // Aprovação parcial: o post ainda não está completo, mas o texto já pode ser aprovado.
+    const falta = faltando(p);
+    const quando = falta ? 'Quando isso ficar pronto, o post volta aqui para a aprovação final.' : 'Quando o post for liberado para a aprovação final, ele aparece aqui de novo.';
+    if (PARC[p.taskId]) {
+      body = `<span class="est-pill est-parcial">Aprovado parcialmente</span><p class="aprov-msg">Você já aprovou o texto e o que está pronto. ${esc(quando)}</p>
+        <button type="button" class="btn btn-link" id="abrirAjuste" ${st.busy ? 'disabled' : ''}>Pedir um ajuste mesmo assim</button>`;
+    } else {
+      body = `<p class="aprov-nota">${falta ? 'Ainda falta: ' + esc(falta) + '. ' : 'Este post ainda não está na versão final. '}Você já pode aprovar o texto e o que está pronto. ${esc(quando)}</p>
+      <div class="aprov-row">
+        <button type="button" class="btn btn-ok" id="aprovarParcial" ${st.busy ? 'disabled' : ''}>${st.busy ? 'Enviando…' : 'Aprovar parcialmente'}</button>
+        <button type="button" class="btn" id="abrirAjuste" ${st.busy ? 'disabled' : ''}>Pedir ajuste</button>
+      </div>`;
+    }
+  } else if (e === 'em-producao') {
+    body = `<p class="aprov-msg">Este post ainda está em produção. Assim que ficar pronto, ele aparece aqui para aprovação.</p>`;
   } else {
     body = `<div class="aprov-row">
         <button type="button" class="btn btn-ok" id="aprovarPost" ${st.busy ? 'disabled' : ''}>${st.busy ? 'Enviando…' : '✓ Aprovar post'}</button>
@@ -447,6 +487,7 @@ function renderAprov() {
   box.hidden = !box.innerHTML;
   const on = (id, fn) => { const b = $(id); if (b) b.addEventListener('click', fn); };
   on('aprovarPost', () => enviar(i, 'aprovar'));
+  on('aprovarParcial', () => enviar(i, 'parcial', faltando(CONTEUDO[i])));
   on('abrirAjuste', () => { st.form = true; st.erro = ''; renderAprov(); const t = $('ajusteTxt'); if (t) t.focus(); });
   on('cancelarAjuste', () => { st.form = false; st.erro = ''; renderAprov(); });
   on('enviarAjuste', () => {
@@ -483,7 +524,7 @@ function renderList() {
     return `<li><button type="button" class="sb-item${active ? ' is-active' : ''}" data-open="${i}" aria-current="${active}">
       <span class="sb-thumb">${c ? `<img src="${esc(c)}" alt="" draggable="false">` : `<span style="font-size:15px;font-weight:600">${String(i + 1).padStart(2, '0')}</span>`}</span>
       <span class="sb-num">${i + 1}</span>
-      <span class="sb-txt"><span class="sb-rot">${esc(p.rotulo)}</span><span class="sb-date">${esc(p.data || '')}${EST_TXT[estadoPost(p)] ? `<span class="sb-est">${EST_TXT[estadoPost(p)]}</span>` : ''}</span></span>
+      <span class="sb-txt"><span class="sb-rot">${esc(p.rotulo)}</span><span class="sb-date">${esc(p.data || '')}${EST_TXT[estadoVis(p)] ? `<span class="sb-est">${EST_TXT[estadoVis(p)]}</span>` : ''}</span></span>
       <span class="sb-type" title="${TYPE[p.tipo]}">${ICONS[p.tipo]}</span>
     </button></li>`;
   }).join('');
@@ -496,7 +537,7 @@ function renderGrid() {
       <span class="tile-veil"><span class="tile-ver">ver</span></span>
       <span class="badge badge-n">${i + 1}</span>
       <span class="badge badge-t">${ICONS[p.tipo]}</span>
-      ${EST_TXT[estadoPost(p)] ? `<span class="badge badge-s est-${estadoPost(p)}">${EST_TXT[estadoPost(p)]}</span>` : ''}
+      ${EST_TXT[estadoVis(p)] ? `<span class="badge badge-s est-${estadoVis(p)}">${EST_TXT[estadoVis(p)]}</span>` : ''}
     </button>`;
   }).join('');
 }
