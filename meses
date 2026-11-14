@@ -1,0 +1,7 @@
+// Meses da página de aprovação da Covatti.
+// Fica na RAIZ do repositório. A cada mês novo, acrescente uma linha no fim.
+// O último mês da lista é o que abre no link principal do Vercel.
+window.MESES = [
+  { nome: 'Novembro 2026', url: '/novembro-2026/' },
+  { nome: 'Dezembro 2026', url: '/dezembro-2026/' }
+];
