@@ -29,6 +29,10 @@ button{font-family:inherit;color:inherit}
 .sb-sub{margin-top:32px}
 .sb-client{margin:0;font-weight:800;font-size:30px;line-height:1.05;letter-spacing:-.03em;color:#fdf9ec}
 .sb-month{margin:12px 0 0 0;display:inline-block;padding:5px 11px;border-radius:999px;background:#c1ff72;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#1c1530}
+.sb-month-sel{position:relative;margin-top:12px}
+.sb-month-sel select{-webkit-appearance:none;appearance:none;border:0;border-radius:999px;background:#c1ff72;color:#1c1530;font:700 10.5px/1.4 'Poppins',system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;padding:5px 30px 5px 11px;cursor:pointer}
+.sb-month-sel select:focus-visible{outline:2px solid #fdf9ec;outline-offset:2px}
+.sb-month-sel svg{position:absolute;right:11px;top:50%;transform:translateY(-50%);pointer-events:none}
 .sb-rule{height:1px;background:rgba(253,249,236,.12);margin:28px 0 18px 0}
 .sb .menu-btn{display:none}
 .sb-list{display:flex;flex-direction:column;gap:4px;margin:0;padding:0;list-style:none}
@@ -172,6 +176,10 @@ button{font-family:inherit;color:inherit}
             <p class="cap" style="margin-bottom:6px">Cliente</p>
             <h2 class="sb-client" id="cliente"></h2>
             <p class="sb-month" id="mes"></p>
+            <span class="sb-month-sel" id="mesSelWrap" style="display:none">
+              <select id="mesSel" aria-label="Trocar o mês"></select>
+              <svg width="10" height="10" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="#1c1530" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </span>
           </div>
         </div>
         <button type="button" class="menu-btn icon-btn" id="menuBtn" aria-expanded="false" aria-controls="lista" aria-label="Mostrar lista de posts">
@@ -207,6 +215,8 @@ button{font-family:inherit;color:inherit}
   <div class="card" id="card" role="dialog" aria-modal="true" tabindex="-1"></div>
 </div>
 
+<!-- Lista de meses do cliente (arquivo meses.js na raiz do repositório). Sem ele, a página mostra só o selo do mês. -->
+<script src="/meses.js"></script>
 <script>
 /* ─────────────────────────────────────────────
    CONTEÚDO DO MÊS
@@ -519,6 +529,16 @@ function refresh() {
 $('cliente').textContent = CLIENTE;
 $('mes').textContent = MES;
 $('mesFoot').textContent = MES;
+// Seletor de mês: aparece quando o meses.js lista mais de um mês.
+(function () {
+  const lista = Array.isArray(window.MESES) ? window.MESES : [];
+  if (lista.length < 2) return;
+  const sel = $('mesSel');
+  sel.innerHTML = lista.map((m) => `<option value="${esc(m.url)}"${m.nome === MES ? ' selected' : ''}>${esc(m.nome)}</option>`).join('');
+  sel.addEventListener('change', () => { if (sel.value) location.href = sel.value; });
+  $('mes').style.display = 'none';
+  $('mesSelWrap').style.display = 'inline-block';
+})();
 const count = (t) => CONTEUDO.filter((p) => p.tipo === t).length;
 function plural(n, a, b) { return n + ' ' + (n === 1 ? a : b); }
 const parts = [plural(CONTEUDO.length, 'publicação', 'publicações')];
